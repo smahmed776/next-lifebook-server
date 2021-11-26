@@ -15,7 +15,7 @@ exports.getUser = async (req, res) => {
           const options = {
             secure: process.env.NODE_ENV !== "development",
             httpOnly: true,
-            sameSite: "strict",
+            sameSite: "lax",
             path: "/",
             maxAge: 1
           };
