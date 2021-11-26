@@ -13,7 +13,7 @@ const sendToken = (user, statusCode, req, res) => {
   const options = {
     secure: process.env.NODE_ENV !== "development",
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
     path: "/",
     maxAge: 7 * 24 * 60 * 60
   };
