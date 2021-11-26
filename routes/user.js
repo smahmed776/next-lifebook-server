@@ -6,7 +6,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.getUser = async (req, res) => {
     const isCookie = req.headers.cookie && cookie.parse(req.headers.cookie);
+    console.log(isCookie)
     const jsonToken = isCookie && isCookie.lifebook_auth_token;
+    console.log(jsonToken)
     if (jsonToken) {
       await jwt.verify(jsonToken, JWT_SECRET, async (err, decode) => {
         if (err) {
