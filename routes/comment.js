@@ -65,7 +65,7 @@ exports.comment = async (req, res) => {
 
             {
               $push: {
-                "read.$[a]$[b].buddy_id": c_id,
+                "read.$[a].buddy_id": c_id,
               },
             },
             {
@@ -73,7 +73,7 @@ exports.comment = async (req, res) => {
               arrayFilters: [
                 {
                   "a.post_id": post_id,
-                  "b.type": "comment"
+                  "a.type": "comment"
                 },
               ],
             }
@@ -114,10 +114,10 @@ exports.comment = async (req, res) => {
 
             {
               $push: {
-                "unread.$[a]$[b].buddy_id": c_id,
+                "unread.$[a].buddy_id": c_id,
               },
               $set: {
-                "unread.$[a]$[b].created": Date.now(),
+                "unread.$[a].created": Date.now(),
               },
             },
             {
@@ -125,7 +125,7 @@ exports.comment = async (req, res) => {
               arrayFilters: [
                 {
                   "a.post_id": post_id,
-                  "b.type": "comment"
+                  "a.type": "comment"
                 },
               ],
             }

@@ -65,7 +65,7 @@ exports.likepost = async (req, res) => {
 
                 {
                   $push: {
-                    "read.$[a]$[b].buddy_id": user_id,
+                    "read.$[a].buddy_id": user_id,
                   },
                 },
                 {
@@ -73,7 +73,7 @@ exports.likepost = async (req, res) => {
                   arrayFilters: [
                     {
                       "a.post_id": post_id,
-                      "b.type": "like"
+                      "a.type": "like"
                     },
                   ],
                 }
@@ -114,7 +114,7 @@ exports.likepost = async (req, res) => {
 
                 {
                   $push: {
-                    "read.$[a]$[b].buddy_id": user_id,
+                    "read.$[a].buddy_id": user_id,
                   },
                 },
                 {
@@ -122,7 +122,7 @@ exports.likepost = async (req, res) => {
                   arrayFilters: [
                     {
                       "a.post_id": post_id,
-                      "b.type" : "like"
+                      "a.type" : "like"
                     },
                   ],
                 }
