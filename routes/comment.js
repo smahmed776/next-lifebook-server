@@ -47,10 +47,11 @@ exports.comment = async (req, res) => {
       // check if user got notification for this post already
       if (userReadthisNotification || userUnReadthisNotification) {
         // user already received notification for this post
+        console.log("user already received notification for this post")
         // now check if user read this notification
         if (userReadthisNotification) {
           // User already read this notifications
-
+          console.log("User already read this notifications")
           const pushId = await Notification.findOneAndUpdate(
             {
               user_id: getPost.author_id,
@@ -96,7 +97,7 @@ exports.comment = async (req, res) => {
           );
         } else {
           //user got notification but didn't read this notification yet
-
+          console.log("user got notification but didn't read this notification yet")
           await Notification.findOneAndUpdate(
             {
               user_id: getPost.author_id,
@@ -127,6 +128,7 @@ exports.comment = async (req, res) => {
         }
       } else {
         //if user didnot receive notification for this post
+        console.log("if user didnot receive notification for this post")
         await Notification.findOneAndUpdate(
           {
             user_id: getPost.author_id,
