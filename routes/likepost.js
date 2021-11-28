@@ -40,10 +40,10 @@ exports.likepost = async (req, res) => {
           //   await newNotification.save();
           // }
           const userReadthisNotification = getNotification.read.find(
-            (notify) => notify.post_id === post_id
+            (notify) => notify.post_id === post_id && notify.type === 'like'
           );
           const userUnReadthisNotification = getNotification.unread.find(
-            (notify) => notify.post_id === post_id
+            (notify) => notify.post_id === post_id && notify.type === 'like'
           );
 
           // check if user got notification for this post already
@@ -58,13 +58,14 @@ exports.likepost = async (req, res) => {
                   read: {
                     $elemMatch: {
                       post_id: post_id,
+                      type: "like"
                     },
                   },
                 },
 
                 {
                   $push: {
-                    "read.$[a].buddy_id": user_id,
+                    "read.$[a]$[b].buddy_id": user_id,
                   },
                 },
                 {
@@ -72,13 +73,14 @@ exports.likepost = async (req, res) => {
                   arrayFilters: [
                     {
                       "a.post_id": post_id,
+                      "b.type": "like"
                     },
                   ],
                 }
               );
               const notifObj =
                 pushId.read[
-                  pushId.read.findIndex((i) => i.post_id === post_id)
+                  pushId.read.findIndex((i) => i.post_id === post_id && i.type === "like")
                 ];
               await Notification.findOneAndUpdate(
                 {
@@ -88,6 +90,7 @@ exports.likepost = async (req, res) => {
                   $pull: {
                     read: {
                       post_id: post_id,
+                      type: "like"
                     },
                   },
                   $push: {
@@ -104,13 +107,14 @@ exports.likepost = async (req, res) => {
                   unread: {
                     $elemMatch: {
                       post_id: post_id,
+                      type: "like"
                     },
                   },
                 },
 
                 {
                   $push: {
-                    "read.$[a].buddy_id": user_id,
+                    "read.$[a]$[b].buddy_id": user_id,
                   },
                 },
                 {
@@ -118,6 +122,7 @@ exports.likepost = async (req, res) => {
                   arrayFilters: [
                     {
                       "a.post_id": post_id,
+                      "b.type" : "like"
                     },
                   ],
                 }

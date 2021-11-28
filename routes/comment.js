@@ -38,10 +38,10 @@ exports.comment = async (req, res) => {
         user_id: getPost.author_id,
       });
       const userReadthisNotification = getNotification.read.find(
-        (notify) => notify.post_id === post_id
+        (notify) => notify.post_id === post_id && notify.type === 'comment'
       );
       const userUnReadthisNotification = getNotification.unread.find(
-        (notify) => notify.post_id === post_id
+        (notify) => notify.post_id === post_id && notify.type === 'comment'
       );
 
       // check if user got notification for this post already
@@ -58,13 +58,14 @@ exports.comment = async (req, res) => {
               read: {
                 $elemMatch: {
                   post_id: post_id,
+                  type: "comment"
                 },
               },
             },
 
             {
               $push: {
-                "read.$[a].buddy_id": c_id,
+                "read.$[a]$[b].buddy_id": c_id,
               },
             },
             {
@@ -72,13 +73,14 @@ exports.comment = async (req, res) => {
               arrayFilters: [
                 {
                   "a.post_id": post_id,
+                  "b.type": "comment"
                 },
               ],
             }
           );
 
           const notifObj =
-            pushId.read[pushId.read.findIndex((i) => i.post_id === post_id)];
+            pushId.read[pushId.read.findIndex((i) => i.post_id === post_id && i.type === "comment")];
           await Notification.findOneAndUpdate(
             {
               user_id: getPost.author_id,
@@ -87,6 +89,7 @@ exports.comment = async (req, res) => {
               $pull: {
                 read: {
                   post_id: post_id,
+                  type: 'comment'
                 },
               },
               $push: {
@@ -104,16 +107,17 @@ exports.comment = async (req, res) => {
               unread: {
                 $elemMatch: {
                   post_id: post_id,
+                  type : "comment"
                 },
               },
             },
 
             {
               $push: {
-                "unread.$[a].buddy_id": c_id,
+                "unread.$[a]$[b].buddy_id": c_id,
               },
               $set: {
-                "unread.$[a].created": Date.now(),
+                "unread.$[a]$[b].created": Date.now(),
               },
             },
             {
@@ -121,6 +125,7 @@ exports.comment = async (req, res) => {
               arrayFilters: [
                 {
                   "a.post_id": post_id,
+                  "b.type": "comment"
                 },
               ],
             }
