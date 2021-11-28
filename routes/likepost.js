@@ -114,7 +114,7 @@ exports.likepost = async (req, res) => {
 
                 {
                   $push: {
-                    "read.$[a].buddy_id": user_id,
+                    "unread.$[a].buddy_id": user_id,
                   },
                 },
                 {

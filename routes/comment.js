@@ -38,27 +38,27 @@ exports.comment = async (req, res) => {
         user_id: getPost.author_id,
       });
       const userReadthisNotification = getNotification.read.find(
-        (notify) => notify.post_id === post_id && notify.type === 'comment'
+        (notify) => notify.post_id === post_id && notify.type === "comment"
       );
       const userUnReadthisNotification = getNotification.unread.find(
-        (notify) => notify.post_id === post_id && notify.type === 'comment'
+        (notify) => notify.post_id === post_id && notify.type === "comment"
       );
 
       // check if user got notification for this post already
       if (userReadthisNotification || userUnReadthisNotification) {
         // user already received notification for this post
-        console.log("user already received notification for this post")
+
         // now check if user read this notification
         if (userReadthisNotification) {
           // User already read this notifications
-          console.log("User already read this notifications")
+
           const pushId = await Notification.findOneAndUpdate(
             {
               user_id: getPost.author_id,
               read: {
                 $elemMatch: {
                   post_id: post_id,
-                  type: "comment"
+                  type: "comment",
                 },
               },
             },
@@ -73,14 +73,18 @@ exports.comment = async (req, res) => {
               arrayFilters: [
                 {
                   "a.post_id": post_id,
-                  "a.type": "comment"
+                  "a.type": "comment",
                 },
               ],
             }
           );
 
           const notifObj =
-            pushId.read[pushId.read.findIndex((i) => i.post_id === post_id && i.type === "comment")];
+            pushId.read[
+              pushId.read.findIndex(
+                (i) => i.post_id === post_id && i.type === "comment"
+              )
+            ];
           await Notification.findOneAndUpdate(
             {
               user_id: getPost.author_id,
@@ -89,7 +93,7 @@ exports.comment = async (req, res) => {
               $pull: {
                 read: {
                   post_id: post_id,
-                  type: 'comment'
+                  type: "comment",
                 },
               },
               $push: {
@@ -100,14 +104,14 @@ exports.comment = async (req, res) => {
           );
         } else {
           //user got notification but didn't read this notification yet
-          console.log("user got notification but didn't read this notification yet")
+
           await Notification.findOneAndUpdate(
             {
               user_id: getPost.author_id,
               unread: {
                 $elemMatch: {
                   post_id: post_id,
-                  type : "comment"
+                  type: "comment",
                 },
               },
             },
@@ -125,7 +129,7 @@ exports.comment = async (req, res) => {
               arrayFilters: [
                 {
                   "a.post_id": post_id,
-                  "a.type": "comment"
+                  "a.type": "comment",
                 },
               ],
             }
@@ -133,7 +137,7 @@ exports.comment = async (req, res) => {
         }
       } else {
         //if user didnot receive notification for this post
-        console.log("if user didnot receive notification for this post")
+
         await Notification.findOneAndUpdate(
           {
             user_id: getPost.author_id,
