@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const mongoose = require("mongoose");
 // import routes
-const { getPosts } = require("./routes/posts");
+const { getPosts } = require("./routes/getPosts");
 const { getUser } = require("./routes/user");
 const { userimage } = require("./routes/userimage");
 const { userinfo } = require("./routes/userinfo");
@@ -23,6 +23,8 @@ const { deletePost } = require("./routes/deletepost");
 const { singlepost } = require("./routes/singlepost");
 const { comment } = require("./routes/comment");
 const { readnotification } = require("./routes/readnotification");
+const { getProfilePost } = require("./routes/getProfilePost");
+const { people } = require("./routes/people");
 
 // Database connection
 const DB = process.env.MONGO_URI;
@@ -49,7 +51,9 @@ app.use(express.json());
 // routes
 app.get("/api/auth/v1/user", getUser);
 app.get("/api/auth/v1/userimage/:id", userimage);
-app.get("/api/auth/v1/posts/:id", getPosts);
+app.get("/api/auth/v1/people/:id", people);
+app.get("/api/auth/v1/posts", getPosts);
+app.get("/api/auth/v1/posts/:id", getProfilePost);
 app.get("/api/auth/v1/userinfo", userinfo);
 app.put("/api/auth/v1/updateuser", updateuser);
 app.put("/api/auth/v1/unlikepost", unlikepost);

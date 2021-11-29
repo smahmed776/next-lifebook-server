@@ -6,11 +6,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 exports.getPosts = async (req, res) => {
   const lookForCookie =
     req.headers.cookie && cookie.parse(req.headers.cookie).lifebook_auth_token;
-if(lookForCookie){
-  await jwt.verify(lookForCookie, JWT_SECRET, async (err, doc) => {
-    if (!err) {
-      const { id } = req.params;
-      if (doc.id === id) {
+  if (lookForCookie) {
+    await jwt.verify(lookForCookie, JWT_SECRET, async (err, doc) => {
+      if (!err) {
         const findPosts = await Posts.find();
         if (findPosts.length > 0) {
           const Posts = findPosts.reverse();
@@ -23,15 +21,10 @@ if(lookForCookie){
         }
       } else {
         console.log(err);
-        return res.status(403).json({ message: "You are not permitted to access data!" });
+        return res.status(403).json({ message: "Invalid web token" });
       }
-    } else {
-      console.log(err);
-      return res.status(403).json({ message: "Invalid web token" });
-
-    }
-  });
-} else {
-  return res.status(403).json({message: "No cookie found"})
-}
+    });
+  } else {
+    return res.status(403).json({ message: "No cookie found" });
+  }
 };

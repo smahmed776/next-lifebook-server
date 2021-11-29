@@ -1,3 +1,4 @@
+const Notification = require("../schemas/NotificationSchema");
 const Posts = require("../schemas/postSchema");
 const User = require("../schemas/UserSchema");
 
@@ -6,6 +7,7 @@ exports.deletePost = async (req, res) => {
   if (id) {
     try {
       const deletePost = await Posts.findOneAndDelete({ _id: id });
+      console.log(deletePost)
       if (deletePost) {
         await User.updateOne(
           { _id: deletePost.author_id },
@@ -19,6 +21,24 @@ exports.deletePost = async (req, res) => {
             safe: true,
           }
         );
+        await Notification.findOneAndUpdate(
+          {user_id: deletePost.author_id},
+          {
+            $pull: {
+              "read": {post_id: deletePost._id.toString()}
+            }
+          },
+          {new: true}
+        )
+        await Notification.findOneAndUpdate(
+          {user_id: deletePost.author_id},
+          {
+            $pull: {
+              "unread": {post_id: deletePost._id.toString()}
+            }
+          },
+          {new: true}
+        )
         res.status(200);
         res.end();
       }
