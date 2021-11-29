@@ -22,6 +22,7 @@ const { likes } = require("./routes/likes");
 const { deletePost } = require("./routes/deletepost");
 const { singlepost } = require("./routes/singlepost");
 const { comment } = require("./routes/comment");
+const { readnotification } = require("./routes/readnotification");
 
 // Database connection
 const DB = process.env.MONGO_URI;
@@ -63,3 +64,4 @@ app.get("/api/auth/v1/likes/:id", likes);
 app.delete("/api/auth/v1/deletepost/:id", deletePost);
 app.get("/api/auth/v1/singlepost/:id", singlepost);
 app.put("/api/auth/v1/comment", comment);
+app.put("/api/auth/v1/readnotification", readnotification);

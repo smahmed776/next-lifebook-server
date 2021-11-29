@@ -36,9 +36,6 @@ exports.getUser = async (req, res) => {
           "profile.profileImage",
           "profile.coverImage",
         ]);
-        const user_notification = await Notification.findOne({
-          user_id: decode.id,
-        });
         res.status(200).json({
           findUser: {
             email: findUser.email,
@@ -51,10 +48,6 @@ exports.getUser = async (req, res) => {
             profile: {
               profileImage: findUser.profile.profileImage,
               coverImage: findUser.profile.coverImage,
-            },
-            notification: {
-              read: user_notification.read,
-              unread: user_notification.unread,
             },
           },
 
