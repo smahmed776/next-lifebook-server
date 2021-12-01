@@ -6,7 +6,6 @@ exports.newpost = async (req, res) => {
       author_id,
       author_username,
       author_name,
-      author_image,
       post,
       image,
       privacy
@@ -16,7 +15,6 @@ exports.newpost = async (req, res) => {
       author_id &&
       author_username &&
       author_name &&
-      author_image &&
       privacy
     ) {
       if (post || image) {
@@ -25,7 +23,6 @@ exports.newpost = async (req, res) => {
             author_id,
             author_username,
             author_name,
-            author_image,
             privacy,
             created: Date.now(),
             post: {
@@ -43,7 +40,6 @@ exports.newpost = async (req, res) => {
                         author_id,
                         author_username,
                         author_name,
-                        author_image,
                         privacy,
                         post: {
                           text: post,

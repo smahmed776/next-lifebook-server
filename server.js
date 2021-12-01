@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser")
 // import routes
 const { getPosts } = require("./routes/getPosts");
 const { getUser } = require("./routes/user");
@@ -46,6 +47,8 @@ app.use(
 
 // Start server
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json());
 
 // routes
