@@ -5,7 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.getPosts = async (req, res) => {
   const lookForCookie =
-    req.headers.cookie && cookie.parse(req.headers.cookie).lifebook_auth_token;
+  req.headers.cookie && cookie.parse(req.headers.cookie).lifebook_auth_token;
   if (lookForCookie) {
     await jwt.verify(lookForCookie, JWT_SECRET, async (err, doc) => {
       if (!err) {

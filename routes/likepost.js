@@ -67,6 +67,9 @@ exports.likepost = async (req, res) => {
                   $push: {
                     "read.$[a].buddy_id": user_id,
                   },
+                  $set: {
+                    "read.$[a].created": Date.now(),
+                  }
                 },
                 {
                   new: true,
@@ -115,6 +118,9 @@ exports.likepost = async (req, res) => {
                 {
                   $push: {
                     "unread.$[a].buddy_id": user_id,
+                  },
+                  $set: {
+                    "unread.$[a].created": Date.now(),
                   },
                 },
                 {

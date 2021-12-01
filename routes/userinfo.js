@@ -8,6 +8,7 @@ exports.userinfo = async (req, res) => {
       const userinfo_1 = await User.findOne({ _id: buddy_id }, [
         "name",
         "username",
+        "profile.profileImage"
       ]);
       const userinfo_2 = await User.findOne({ _id: buddy_id_2 }, [
         "name",
@@ -18,6 +19,7 @@ exports.userinfo = async (req, res) => {
           {
             name: userinfo_1.name,
             username: userinfo_1.username,
+            profileImage: userinfo_1.profile.profileImage
           },
           {
             name: userinfo_2.name,
@@ -29,12 +31,14 @@ exports.userinfo = async (req, res) => {
       const userinfo_1 = await User.findOne({ _id: buddy_id }, [
         "name",
         "username",
+        "profile.profileImage"
       ]);
       res.status(200).json({
         users: [
           {
             name: userinfo_1.name,
             username: userinfo_1.username,
+            profileImage: userinfo_1.profile.profileImage
           },
         ],
       });

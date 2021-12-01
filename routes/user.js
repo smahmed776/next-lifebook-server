@@ -35,24 +35,10 @@ exports.getUser = async (req, res) => {
           "_id",
           "profile.profileImage",
           "profile.coverImage",
+          "friends",
+          "friend_requests"
         ]);
-        res.status(200).json({
-          findUser: {
-            email: findUser.email,
-            username: findUser.username,
-            name: {
-              firstName: findUser.name.firstName,
-              lastName: findUser.name.lastName,
-            },
-            _id: findUser._id,
-            profile: {
-              profileImage: findUser.profile.profileImage,
-              coverImage: findUser.profile.coverImage,
-            },
-          },
-
-          message: "User Found",
-        });
+        res.status(200).json(findUser);
       }
     });
   } else {

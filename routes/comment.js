@@ -67,6 +67,9 @@ exports.comment = async (req, res) => {
               $push: {
                 "read.$[a].buddy_id": c_id,
               },
+              $set: {
+                "read.$[a].created": Date.now(),
+              }
             },
             {
               new: true,

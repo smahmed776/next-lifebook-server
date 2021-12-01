@@ -4,7 +4,7 @@ const User = require("../schemas/UserSchema")
 const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.updateuser = async (req, res) => {
-    const isCookie = cookie.parse(req.headers.cookie);
+    const isCookie = req.headers.cookie && cookie.parse(req.headers.cookie);
     const jsonToken = isCookie && isCookie.lifebook_auth_token;
     if (jsonToken) {
       let decode;

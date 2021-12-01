@@ -26,6 +26,7 @@ const { comment } = require("./routes/comment");
 const { readnotification } = require("./routes/readnotification");
 const { getProfilePost } = require("./routes/getProfilePost");
 const { people } = require("./routes/people");
+const { sentrequest } = require("./routes/sentrequest");
 
 // Database connection
 const DB = process.env.MONGO_URI;
@@ -72,3 +73,4 @@ app.delete("/api/auth/v1/deletepost/:id", deletePost);
 app.get("/api/auth/v1/singlepost/:id", singlepost);
 app.put("/api/auth/v1/comment", comment);
 app.put("/api/auth/v1/readnotification", readnotification);
+app.put("/api/auth/v1/sentrequest/:receiver_id", sentrequest);
