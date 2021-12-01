@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
 // import routes
 const { getPosts } = require("./routes/getPosts");
 const { getUser } = require("./routes/user");
@@ -27,6 +27,7 @@ const { readnotification } = require("./routes/readnotification");
 const { getProfilePost } = require("./routes/getProfilePost");
 const { people } = require("./routes/people");
 const { sentrequest } = require("./routes/sentrequest");
+const { confirmRequest, rejectRequest } = require("./routes/friendrequest");
 
 // Database connection
 const DB = process.env.MONGO_URI;
@@ -48,8 +49,8 @@ app.use(
 
 // Start server
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
 
 // routes
@@ -74,3 +75,5 @@ app.get("/api/auth/v1/singlepost/:id", singlepost);
 app.put("/api/auth/v1/comment", comment);
 app.put("/api/auth/v1/readnotification", readnotification);
 app.put("/api/auth/v1/sentrequest/:receiver_id", sentrequest);
+app.put("/api/auth/v1/confirmrequest/:sender_id", confirmRequest);
+app.put("/api/auth/v1/rejectrequest/:sender_id", rejectRequest);
