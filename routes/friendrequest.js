@@ -142,3 +142,40 @@ exports.rejectRequest = async (req, res) => {
     });
   }
 };
+
+
+exports.unfriend = async (req, res) => {
+  const { receiver_id } = req.params;
+  const { sender_id } = req.body;
+  if(receiver_id && sender_id){
+    await User.findOneAndUpdate(
+      {
+        _id: receiver_id
+      },
+      {
+        $pull : {
+          "friends": sender_id
+        }
+      },
+      {
+        new: true
+      }
+    );
+    
+    await User.findOneAndUpdate(
+      {
+        _id : sender_id
+      },
+      {
+        $pull : {
+          "friends": receiver_id
+        },
+      },
+      {
+        new: true
+      }
+    )
+    res.status(200)
+    res.end()
+  }
+}

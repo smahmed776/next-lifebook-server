@@ -27,7 +27,7 @@ const { readnotification } = require("./routes/readnotification");
 const { getProfilePost } = require("./routes/getProfilePost");
 const { people } = require("./routes/people");
 const { sentrequest } = require("./routes/sentrequest");
-const { confirmRequest, rejectRequest } = require("./routes/friendrequest");
+const { confirmRequest, rejectRequest, unfriend } = require("./routes/friendrequest");
 
 // Database connection
 const DB = process.env.MONGO_URI;
@@ -77,3 +77,4 @@ app.put("/api/auth/v1/readnotification", readnotification);
 app.put("/api/auth/v1/sentrequest/:receiver_id", sentrequest);
 app.put("/api/auth/v1/confirmrequest/:sender_id", confirmRequest);
 app.put("/api/auth/v1/rejectrequest/:sender_id", rejectRequest);
+app.put("/api/auth/v1/unfriend/:receiver_id", unfriend);
