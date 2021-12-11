@@ -28,6 +28,7 @@ const { getProfilePost } = require("./routes/getProfilePost");
 const { people } = require("./routes/people");
 const { sentrequest } = require("./routes/sentrequest");
 const { confirmRequest, rejectRequest, unfriend } = require("./routes/friendrequest");
+const { getFriends } = require("./routes/getFriends");
 
 // Database connection
 const DB = process.env.MONGO_URI;
@@ -79,3 +80,4 @@ app.put("/api/auth/v1/sentrequest/:receiver_id", sentrequest);
 app.put("/api/auth/v1/confirmrequest/:sender_id", confirmRequest);
 app.put("/api/auth/v1/rejectrequest/:sender_id", rejectRequest);
 app.put("/api/auth/v1/unfriend/:receiver_id", unfriend);
+app.post("/api/auth/v1/friends/:id", getFriends)
