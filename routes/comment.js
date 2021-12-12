@@ -29,10 +29,82 @@ exports.comment = async (req, res) => {
       const getPost = await Posts.findOne({ _id: post_id }, [
         "author_id",
         "author_name",
+        "reactions.comments",
       ]);
 
       if (getPost.author_id === c_id) {
+        const filterComment = getPost.reactions.comments.filter(
+          (comment) => comment.c_id !== getPost.author_id
+        );
+        if (filterComment.length > 0) {
+          const buddies = filterComment.map(comment => comment.c_id);
+          const uniqueBuddies = buddies.filter((buddy, index)=> buddies.indexOf(buddy) === index);
+          for (let index = 0; index < uniqueBuddies.length; index++) {
+            const element = uniqueBuddies[index];
+            await Notification.findOneAndUpdate(
+              { user_id: element },
+              {
+                $push: {
+                  unread: {
+                    type: "replycomment",
+                    buddy_id: [c_id, ...uniqueBuddies],
+                    created: Date.now(),
+                    post_id: post_id,
+                    author_id: [getPost.author_id]
+                  },
+                },
+                $pull: {
+                  read: {
+                    type: "replycomment",
+                    post_id: post_id,
+                  },
+                },
+              },
+              { new: true }
+            );
+          }
+          return res.status(200).json({ message: "commented" });
+        }
         return res.status(200).json({ message: "commented" });
+      } else {
+        if (getPost.reactions.comments.length > 0) {
+          const buddies = getPost.reactions.comments.filter(cmnt => cmnt.c_id !== c_id).map(comment => comment.c_id);
+          if(buddies.length > 0){
+
+            const uniqueBuddies = buddies.filter((buddy, index)=> buddies.indexOf(buddy) === index);
+            for (
+              let index = 0;
+              index < uniqueBuddies.length;
+              index++
+            ) {
+              const element = uniqueBuddies[index];
+              await Notification.findOneAndUpdate(
+                {
+                  user_id: element,
+                },
+                {
+                  $push: {
+                    unread: {
+                      type: "replycomment",
+                      created: Date.now(),
+                      post_id: post_id,
+                      buddy_id: [c_id, ...uniqueBuddies],
+                      author_id: [getPost.author_id]
+                    },
+                  },
+                  $pull: {
+                    read: {
+                      type: "replycomment",
+                      post_id: post_id,
+                    },
+                  },
+                },
+                { new: true }
+              );
+  
+            }
+          }
+        }
       }
       const getNotification = await Notification.findOne({
         user_id: getPost.author_id,
@@ -69,7 +141,7 @@ exports.comment = async (req, res) => {
               },
               $set: {
                 "read.$[a].created": Date.now(),
-              }
+              },
             },
             {
               new: true,
