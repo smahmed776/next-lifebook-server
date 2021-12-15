@@ -3,13 +3,13 @@ const User = require("../schemas/UserSchema")
 exports.people = async (req, res) =>{
     const { id } = req.params;
     if(id){
-        const getPeople = await User.find({}, ["name", "profile.profileImage"]);
+        const getPeople = await User.find({}, ["name", "profile.profileImage", "verified"]);
         const findUser = await User.findOne({_id: id});
         const pullUser = getPeople.filter(people => people._id.toString() !== id);
         let result = [];
         for (let index = 0; index < pullUser.length; index++) {
             const element = pullUser[index];
-            if(findUser.friends.includes(element._id)){
+            if(findUser?.friends?.includes(element._id)){
             } else {
             result.push(element)
             }   

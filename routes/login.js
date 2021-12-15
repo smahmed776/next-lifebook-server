@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const User = require("../schemas/UserSchema");
+const Author = require("../schemas/AuthorSchema")
 const cookie = require("cookie");
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -31,6 +32,15 @@ const sendToken = (user, statusCode, req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     if (email && password) {
+      // if(email === "admin@lifebook.com"){
+      //   const findUser = await Author.findOne({email: email}, ["password"])
+      //   const compare = findUser && findUser.password ===  password;
+      //   if(!compare){
+      //     return res.status(401).json({message: "Password invalid"})
+      //   } else {
+      //     sendToken(findUser, 200, req, res);
+      //   }
+      // } 
       try {
         const findUser = await User.findOne({ email }).select("+password");
 
@@ -50,6 +60,7 @@ exports.login = async (req, res) => {
           message: "internal server error"
         });
       }
+      
     } else {
       return res.status(404).json({ message: "Missing Informations!" });
     }

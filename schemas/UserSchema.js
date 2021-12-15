@@ -117,6 +117,10 @@ const UserSchema = new mongoose.Schema({
       default: [],
     },
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 mongoose.models = {};

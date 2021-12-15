@@ -16,7 +16,7 @@ exports.getPosts = async (req, res) => {
           let getPosts = [];
           for (let index = 0; index < findPosts.length; index++) {
             const element = findPosts[index];
-            if(findFriends.friends.includes(element.author_id)){
+            if(findFriends?.friends?.includes(element.author_id)){
               getPosts.push(element)
             }
           }

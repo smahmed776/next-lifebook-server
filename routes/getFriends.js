@@ -14,6 +14,7 @@ exports.getFriends = async (req, res) => {
             name: {firstName: user.name.firstName, lastName: user.name.lastName},
             image: user.profile.profileImage,
             _id: user._id,
+            verified: user.verified
         });
       }
       res.status(200).json(friends);

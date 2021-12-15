@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../schemas/UserSchema");
+const Author = require("../schemas/AuthorSchema")
 const Notification = require("../schemas/NotificationSchema");
 const cookie = require("cookie");
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -36,9 +37,16 @@ exports.getUser = async (req, res) => {
           "profile.profileImage",
           "profile.coverImage",
           "friends",
-          "friend_requests"
+          "friend_requests",
+          "verified"
         ]);
+       
+        if(findUser){
         res.status(200).json(findUser);
+        } else {
+          const isAuthor = await Author.findById(decode.id)
+          res.status(200).json(isAuthor)
+        }
       }
     });
   } else {
