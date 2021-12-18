@@ -7,7 +7,6 @@ exports.deletePost = async (req, res) => {
   if (id) {
     try {
       const deletePost = await Posts.findOneAndDelete({ _id: id });
-      console.log(deletePost)
       if (deletePost) {
         await User.updateOne(
           { _id: deletePost.author_id },

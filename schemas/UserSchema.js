@@ -120,6 +120,11 @@ const UserSchema = new mongoose.Schema({
   verified: {
     type: Boolean,
     default: false,
+  },
+  clearance: {
+    type: String,
+    enum: ["admin", "user", "moderator"],
+    default: "user"
   }
 });
 

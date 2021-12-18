@@ -38,7 +38,8 @@ exports.getUser = async (req, res) => {
           "profile.coverImage",
           "friends",
           "friend_requests",
-          "verified"
+          "verified",
+          "clearance"
         ]);
        
         if(findUser){
