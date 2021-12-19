@@ -1,7 +1,7 @@
 const Users = require("../../schemas/UserSchema");
 
 exports.updateUser = async (req, res) => {
-  const userId = req.userId;
+  const userId = req.userId.id;
   const isAdmin = await Users.findOne({ _id: userId }, ["type"]);
   if (isAdmin.type === "admin") {
     const { id } = req.params;
