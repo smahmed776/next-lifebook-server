@@ -15,6 +15,7 @@ exports.likes = async (req, res) => {
             userArr.push({
               name: findUser.name,
               image: findUser.profile.profileImage,
+              verified: findUser.verified
             });
           }
         }

@@ -5,6 +5,9 @@ const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cookie = require("cookie");
+const jwt = require("jsonwebtoken")
+const JWT_SECRET = process.env.JWT_SECRET;
 // import routes
 const { getPosts } = require("./routes/getPosts");
 const { getUser } = require("./routes/user");
@@ -30,6 +33,7 @@ const { sentrequest } = require("./routes/sentrequest");
 const { confirmRequest, rejectRequest, unfriend } = require("./routes/friendrequest");
 const { getFriends } = require("./routes/getFriends");
 const { adminUsersInfo } = require("./routes/admin/adminUsersInfo");
+const { updateUser } = require("./routes/admin/adminupdate");
 
 // Database connection
 const DB = process.env.MONGO_URI;
@@ -55,8 +59,38 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
 
+// middleware for authentication
+const authenticate = (req, res, next) => {
+  const checkForCookie = req.headers.cookie && cookie.parse(req.headers.cookie);
+  const token = checkForCookie && checkForCookie.lifebook_auth_token
+  if(token){
+    jwt.verify(token, JWT_SECRET, (err, doc)=> {
+      if(err){
+        const options = {
+          secure: process.env.NODE_ENV !== "development",
+          httpOnly: true,
+          sameSite: "none",
+          path: "/",
+          maxAge: 1,
+        };
+        res.setHeader(
+          "set-cookie",
+          cookie.serialize("lifebook_auth_token", "invalid token", options)
+        );
+        return res.status(403).json({
+          message: "invalid web token",
+        });
+      }
+      req.userId = doc;
+      next()
+    })
+  }
+}
+
+
+
 // routes
-app.get("/api/auth/v1/user", getUser);
+app.get("/api/auth/v1/user", authenticate, getUser);
 app.get("/api/auth/v1/userimage/:id", userimage);
 app.get("/api/auth/v1/people/:id", people);
 app.get("/api/auth/v1/posts", getPosts);
@@ -81,5 +115,6 @@ app.put("/api/auth/v1/sentrequest/:receiver_id", sentrequest);
 app.put("/api/auth/v1/confirmrequest/:sender_id", confirmRequest);
 app.put("/api/auth/v1/rejectrequest/:sender_id", rejectRequest);
 app.put("/api/auth/v1/unfriend/:receiver_id", unfriend);
-app.post("/api/auth/v1/friends/:id", getFriends)
-app.post("/api/auth/v1/admin/users", adminUsersInfo)
+app.post("/api/auth/v1/friends/:id", getFriends);
+app.post("/api/auth/v1/admin/users", adminUsersInfo);
+app.post("/api/auth/v1/adminupdate/:id", authenticate, updateUser)

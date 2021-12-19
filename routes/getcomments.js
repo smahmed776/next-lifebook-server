@@ -17,7 +17,8 @@ exports.getcomments = async (req, res) => {
                     image: findUser.profile.profileImage,
                     text: element.text,
                     created: element.created,
-                    c_id: element.c_id
+                    c_id: element.c_id,
+                    verified: findUser.verified
                     
                   });
               }
