@@ -3,9 +3,9 @@ const Users = require("../../schemas/UserSchema");
 exports.updateUser = async (req, res) => {
   const userId = req.userId.id;
   console.log(userId)
-  const isAdmin = await Users.findOne({ _id: userId }, ["type"]);
+  const isAdmin = await Users.findOne({ _id: userId }, ["clearance"]);
   console.log(isAdmin)
-  if (isAdmin.type === "admin") {
+  if (isAdmin.clearance === "admin") {
     const { id } = req.params;
     const { verified } = req.body;
     console.log("working", id)
