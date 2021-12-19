@@ -31,6 +31,9 @@ const PostSchema = new mongoose.Schema({
         },
         images: {
             type: Array
+        },
+        video: {
+            type: String
         }
     },
     created: {

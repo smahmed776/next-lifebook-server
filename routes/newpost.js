@@ -8,6 +8,7 @@ exports.newpost = async (req, res) => {
       author_name,
       post,
       image,
+      video,
       privacy
     } = req.body;
 
@@ -17,7 +18,7 @@ exports.newpost = async (req, res) => {
       author_name &&
       privacy
     ) {
-      if (post || image) {
+      if (post || image || video) {
         try {
           const newPost = await new Posts({
             author_id,
@@ -27,7 +28,8 @@ exports.newpost = async (req, res) => {
             created: Date.now(),
             post: {
               text: post,
-              images: image
+              images: image,
+              video: video,
             },
           });
           await newPost.save();
@@ -43,7 +45,8 @@ exports.newpost = async (req, res) => {
                         privacy,
                         post: {
                           text: post,
-                          images: image
+                          images: image,
+                          video: video,
                         },
 
                       }
